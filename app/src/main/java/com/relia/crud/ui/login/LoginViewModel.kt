@@ -38,10 +38,8 @@ class LoginViewModel @Inject constructor(
             .subscribe({ result ->
                 _loginResult.value = result.token
                 sharedPreferences.edit().putString(TOKEN_KEY, result.token).apply()
-            }
-            ) { error ->
-                if (error is HttpException)
-                {
+            }) { error ->
+                if (error is HttpException) {
                     val errorMessage: NetworkErrorResponse = Gson().fromJson(
                         error.response()?.errorBody()?.string(),
                         object : TypeToken<NetworkErrorResponse>() {}.type

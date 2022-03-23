@@ -1,20 +1,22 @@
 package com.relia.crud.ui.login
 
 import android.content.Intent
-import androidx.lifecycle.Observer
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.relia.crud.databinding.ActivityLoginBinding
 import com.relia.crud.ui.main.MainActivity
+import com.relia.crud.ui.register.RegisterActivity
 import com.relia.crud.utils.ViewUtils.afterTextChanged
 import dagger.hilt.android.AndroidEntryPoint
+import android.graphics.Paint
+
+
+
 
 @AndroidEntryPoint
 
@@ -51,6 +53,7 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.loginResult.observe(this@LoginActivity, {
             loading.visibility = View.GONE
             startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+            finish()
         })
         loginViewModel.loginResultFailed.observe(this@LoginActivity, Observer {
             val loginResult = it ?: return@Observer
@@ -89,6 +92,12 @@ class LoginActivity : AppCompatActivity() {
                 loading.visibility = View.VISIBLE
                 loginViewModel.login(username.text.toString(), password.text.toString())
             }
+        }
+        binding.btnRegister.paintFlags = binding.btnRegister.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+
+        binding.btnRegister.setOnClickListener {
+            startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
+            finish()
         }
     }
 

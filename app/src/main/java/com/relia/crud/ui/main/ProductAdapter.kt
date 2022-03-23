@@ -4,10 +4,9 @@ import com.relia.crud.R
 import com.relia.crud.data.product.Product
 import com.relia.crud.databinding.ItemMainProductBinding
 import com.relia.crud.ui.BaseAdapter
-import com.relia.crud.ui.ListAdapterItem
 
 class ProductAdapter(
-    private val list: List<Product>,
+    list: List<Product>,
     private val productListener: ProductListener
 ) : BaseAdapter<ItemMainProductBinding, Product>(list) {
 

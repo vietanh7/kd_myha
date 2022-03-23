@@ -26,10 +26,10 @@ fun submitList(recyclerView: RecyclerView, list: List<ListAdapterItem>?) {
     adapter?.updateData(list ?: listOf())
 }
 
-@BindingAdapter("manageState")
-fun manageState(progressBar: ProgressBar, state: Boolean) {
-    progressBar.visibility = if (state) View.VISIBLE else View.GONE
-}
+//@BindingAdapter("manageState")
+//fun manageState(progressBar: ProgressBar, state: Boolean) {
+//    progressBar.visibility = if (state) View.VISIBLE else View.GONE
+//}
 
 //@BindingAdapter("setImage")
 //fun setImage(imageView: ShapeableImageView, image: Int) {

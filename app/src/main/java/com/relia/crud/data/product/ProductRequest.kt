@@ -6,7 +6,7 @@ class ProductRequest(var product: Product) : Serializable {
     val params: Map<String, String>
         get() {
             val params: MutableMap<String, String> = HashMap()
-            params["sku"] = product.sku.toString()
+            params["sku"] = product.sku
             params["product_name"] = product.product_name.toString()
             params["qty"] = product.qty.toString()
             params["price"] = product.price.toString()

@@ -8,6 +8,7 @@ class ProductRepository @Inject constructor(
     private val productService: ProductService
 ) {
     fun getProducts(): Observable<ArrayList<Product>> = productService.getAllProducts()
+    fun addProduct(product: Product): Observable<String> = productService.addProduct(ProductRequest(product).params)
     fun updateProduct(product: Product): Observable<String> = productService.updateProduct(ProductRequest(product).params)
     fun deleteProduct(product: Product): Observable<String> = productService.deleteProduct(ProductRequest(product).params)
     fun searchProductBySku(sku:String) = productService.searchProduct(SearchProductRequest(sku))

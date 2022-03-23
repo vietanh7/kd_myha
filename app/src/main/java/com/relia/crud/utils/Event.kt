@@ -1,9 +1,5 @@
 package com.relia.crud.utils
 
-/**
- * Used as a wrapper for data that is exposed via a LiveData that represents an event.
- * @see https://medium.com/androiddevelopers/livedata-with-snackbar-navigation-and-other-events-the-singleliveevent-case-ac2622673150
- */
 open class Event<out T>(private val content: T) {
 
     private var hasBeenHandled = false

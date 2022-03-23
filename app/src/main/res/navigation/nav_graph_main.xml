@@ -13,10 +13,18 @@
             android:id="@+id/action_mainFragment_to_productDetailFragment"
             app:destination="@id/productDetailFragment"
             app:popUpTo="@id/mainFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_newProductFragment"
+            app:destination="@id/newProductFragment"
+            app:popUpTo="@id/mainFragment" />
     </fragment>
     <fragment
         android:id="@+id/productDetailFragment"
         android:name="com.relia.crud.ui.main.ProductDetailFragment"
         android:label="fragment_product_detail"
         tools:layout="@layout/fragment_product_detail" />
+    <fragment
+        android:id="@+id/newProductFragment"
+        android:name="com.relia.crud.ui.main.NewProductFragment"
+        android:label="NewProductFragment" />
 </navigation>
