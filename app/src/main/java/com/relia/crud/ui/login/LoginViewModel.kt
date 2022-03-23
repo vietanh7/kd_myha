@@ -5,18 +5,22 @@ import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.relia.crud.Constant.TOKEN_KEY
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.relia.crud.R
-import com.relia.crud.ui.login.data.LoginRepository
+import com.relia.crud.data.auth.AuthRepository
+import com.relia.crud.data.remote.NetworkErrorResponse
+import com.relia.crud.utils.Constant.TOKEN_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
+import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
 
 class LoginViewModel @Inject constructor(
-    private val sharedPreferences: SharedPreferences, private val loginRepository: LoginRepository
+    private val sharedPreferences: SharedPreferences, private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
@@ -28,14 +32,23 @@ class LoginViewModel @Inject constructor(
     val loginResultFailed: LiveData<String> = _loginResultFailed
 
     fun login(email: String, password: String) {
-        loginRepository.login(email, password)
+        authRepository.login(email, password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ result ->
-                _loginResult.value = result
-                sharedPreferences.edit().putString(TOKEN_KEY, result).apply()
+                _loginResult.value = result.token
+                sharedPreferences.edit().putString(TOKEN_KEY, result.token).apply()
             }
-            ) { error -> _loginResultFailed.value = error.message }
+            ) { error ->
+                if (error is HttpException)
+                {
+                    val errorMessage: NetworkErrorResponse = Gson().fromJson(
+                        error.response()?.errorBody()?.string(),
+                        object : TypeToken<NetworkErrorResponse>() {}.type
+                    )
+                    _loginResultFailed.value = errorMessage.error.toString()
+                }
+            }
     }
 
     fun loginDataChanged(username: String, password: String) {

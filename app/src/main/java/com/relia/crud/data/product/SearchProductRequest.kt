@@ -1,4 +1,4 @@
-package com.relia.crud.data.remote
+package com.relia.crud.data.product
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,17 +1,14 @@
 package com.relia.crud.di
 
-import android.content.Context
-import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.relia.crud.Constant.BASE_URL
-import com.relia.crud.data.remote.AuthenticationService
+import com.relia.crud.utils.Constant.BASE_URL
+import com.relia.crud.data.auth.AuthService
 import com.relia.crud.data.remote.HeaderInterceptor
-import com.relia.crud.data.remote.ProductService
+import com.relia.crud.data.product.ProductService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import okhttp3.OkHttpClient
@@ -51,6 +48,6 @@ class AppModule {
         retrofit.create(ProductService::class.java)
 
     @Provides
-    fun provideAuthenticationService(retrofit: Retrofit): AuthenticationService =
-        retrofit.create(AuthenticationService::class.java)
+    fun provideAuthenticationService(retrofit: Retrofit): AuthService =
+        retrofit.create(AuthService::class.java)
 }

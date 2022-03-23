@@ -1,4 +1,4 @@
-package com.relia.crud.data
+package com.relia.crud.data.auth
 
 class User {
     var email : String? = null

@@ -2,7 +2,7 @@ package com.relia.crud.data.remote
 
 import android.content.SharedPreferences
 import android.text.TextUtils
-import com.relia.crud.Constant.TOKEN_KEY
+import com.relia.crud.utils.Constant.TOKEN_KEY
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject

@@ -1,4 +1,4 @@
-package com.relia.crud
+package com.relia.crud.utils
 
 object Constant {
     var BASE_URL = "https://hoodwink.medkomtek.net/api/"

@@ -6,22 +6,23 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.relia.crud.R
+import com.relia.crud.databinding.ActivityLoginBinding
+import com.relia.crud.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        observeListProduct()
-    }
-
-    private fun observeListProduct() {
-        viewModel.products.observe(this) {
-            val products = findViewById<RecyclerView>(R.id.rvProduct)
-            products.layoutManager = LinearLayoutManager(this)
-            products.adapter = ProductAdapter(it)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding.apply {
+            viewModel = this@MainActivity.viewModel
+            lifecycleOwner = this@MainActivity
         }
+        setContentView(binding.root)
+        binding.adapter = ProductAdapter(listOf(), viewModel)
     }
 }
