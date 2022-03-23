@@ -73,6 +73,11 @@ dependencies {
     // LiveData
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
 
+    //Log API
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
 
+    //Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:2.4.1"
+    implementation "androidx.navigation:navigation-ui-ktx:2.4.1"
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:2.4.1"
 }

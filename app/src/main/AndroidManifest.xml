@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.relia.crud">
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -15,7 +16,7 @@
             android:name=".ui.login.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.splashscreen.SplashScreenActivity"
             android:exported="true"

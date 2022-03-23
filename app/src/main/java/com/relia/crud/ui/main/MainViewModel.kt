@@ -8,6 +8,7 @@ import com.relia.crud.data.product.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import android.util.Log
+import com.relia.crud.utils.Event
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 
@@ -16,14 +17,15 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val productRepository: ProductRepository
-) : ViewModel(), ProductListener {
+) : ViewModel() {
     private val _productList = MutableLiveData<List<Product>>()
     val products: LiveData<List<Product>> = _productList
-    init {
-        loadProductList()
-    }
+    var selectedProduct: Product? = null
 
-    private fun loadProductList() {
+    val showProductDetail = MutableLiveData<Event<Product>>()
+    val showToast = MutableLiveData<Event<String>>()
+
+    fun loadProductList() {
         productRepository.getProducts()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -39,16 +41,16 @@ class MainViewModel @Inject constructor(
             ) { error -> Log.e("TAG", "search products error: " + error.message) }
     }
 
-    override fun onEdit(product:Product) {
+    fun onEdit(product:Product) {
         productRepository.updateProduct(product)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ result ->  Log.d("TAG", "update products success: $result")}
+            .subscribe({ result ->  showToast.value = Event("update product successfully: $result")}
             ) { error -> Log.e("TAG", "update products error: " + error.message) }
 
     }
 
-    override fun onDelete(product:Product) {
+    fun onDelete(product:Product) {
         productRepository.deleteProduct(product)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -56,4 +58,9 @@ class MainViewModel @Inject constructor(
             ) { error -> Log.e("TAG", "update products error: " + error.message) }
 
     }
+
+    fun onClick(product:Product) {
+        showProductDetail.value = Event(product)
+    }
+
 }

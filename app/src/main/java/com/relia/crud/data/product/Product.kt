@@ -3,14 +3,12 @@ package com.relia.crud.data.product
 import com.relia.crud.ui.ListAdapterItem
 import java.io.Serializable
 
-data class Product (
+class Product(
     val sku: String,
-    val product_name: String?,
-    val qty: Int?,
-    val price: Long?,
-    val unit: String?,
-    val status: Short?,
-    override val id: Long
-): ListAdapterItem, Serializable {
-    constructor(sku: String) : this(sku, null, null, null, null, null, -1)
-}
+    val product_name: String? = null,
+    val qty: Int? = null,
+    val price: Long? = null,
+    val unit: String? = null,
+    val status: Short? = null,
+    override val id: Long? = null
+) : ListAdapterItem, Serializable
