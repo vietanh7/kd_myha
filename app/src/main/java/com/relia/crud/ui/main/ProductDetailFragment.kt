@@ -45,13 +45,19 @@ class ProductDetailFragment : Fragment(R.layout.fragment_product_detail), Produc
         super.onViewCreated(view, savedInstanceState)
 
         activity?.title = getString(R.string.product_detail);
-        val actionBar = (activity as AppCompatActivity?)!!.supportActionBar
+        val actionBar = (activity as AppCompatActivity?)?.supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.setHomeButtonEnabled(true)
 
         viewModel.showToast.observe(this) { event ->
             event.getContentIfNotHandled()?.let {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        viewModel.showToastResInt.observe(this) { event ->
+            event.getContentIfNotHandled()?.let {
+                Toast.makeText(requireContext(), getString(it), Toast.LENGTH_SHORT).show()
             }
         }
 

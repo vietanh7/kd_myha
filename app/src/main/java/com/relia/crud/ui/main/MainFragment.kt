@@ -58,13 +58,19 @@ class MainFragment : Fragment(R.layout.fragment_main), ProductListener {
         navController = findNavController(view)
 
         activity?.title = getString(R.string.product_list)
-        val actionBar = (activity as AppCompatActivity?)!!.supportActionBar
+        val actionBar = (activity as AppCompatActivity?)?.supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(false)
         actionBar?.setHomeButtonEnabled(false)
 
         viewModel.showToast.observe(this) { event ->
             event.getContentIfNotHandled()?.let {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        viewModel.showToastResInt.observe(this) { event ->
+            event.getContentIfNotHandled()?.let {
+                Toast.makeText(requireContext(), getString(it), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -98,13 +104,13 @@ class MainFragment : Fragment(R.layout.fragment_main), ProductListener {
         inflater.inflate(R.menu.main_menu, menu)
         val searchItem = menu.findItem(R.id.action_search)
         val searchManager =
-            activity!!.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+            activity?.getSystemService(Context.SEARCH_SERVICE) as SearchManager
         if (searchItem != null) {
             searchView = searchItem.actionView as SearchView
         }
         if (searchView != null) {
-            searchView!!.queryHint = "Search by SKU"
-            searchView!!.setSearchableInfo(searchManager.getSearchableInfo(activity!!.componentName))
+            searchView?.queryHint = "Search by SKU"
+            searchView?.setSearchableInfo(searchManager.getSearchableInfo(activity?.componentName))
             queryTextListener = object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newText: String): Boolean {
                     if (TextUtils.isEmpty(newText)) {
@@ -114,12 +120,12 @@ class MainFragment : Fragment(R.layout.fragment_main), ProductListener {
                 }
 
                 override fun onQueryTextSubmit(query: String): Boolean {
-                    searchView!!.clearFocus()
+                    searchView?.clearFocus()
                     viewModel.onSearch(query)
                     return true
                 }
             }
-            searchView!!.setOnQueryTextListener(queryTextListener)
+            searchView?.setOnQueryTextListener(queryTextListener)
         }
         super.onCreateOptionsMenu(menu, inflater)
     }

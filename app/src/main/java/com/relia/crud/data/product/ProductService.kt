@@ -8,18 +8,18 @@ interface ProductService {
     fun getAllProducts(): Observable<ArrayList<Product>>
 
     @POST("item/search")
-    fun searchProduct(@Body request: SearchProductRequest): Observable<Product>
+    fun searchProduct(@Body request: SearchProductRequest): Observable<ProductResponse>
 
     @FormUrlEncoded
     @POST("item/add")
-    fun addProduct(@FieldMap body: Map<String, String>): Observable<Product>
+    fun addProduct(@FieldMap body: Map<String, String>): Observable<ProductResponse>
 
     @FormUrlEncoded
     @POST("item/update")
-    fun updateProduct(@FieldMap body: Map<String, String>): Observable<Product>
+    fun updateProduct(@FieldMap body: Map<String, String>): Observable<ProductResponse>
 
     @FormUrlEncoded
     @POST("item/delete")
-    fun deleteProduct(@FieldMap body: Map<String, String>): Observable<Product>
+    fun deleteProduct(@FieldMap body: Map<String, String>): Observable<ProductResponse>
 
 }

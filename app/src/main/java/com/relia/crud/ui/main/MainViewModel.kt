@@ -12,6 +12,7 @@ import com.relia.crud.data.product.Product
 import com.relia.crud.data.product.ProductRepository
 import com.relia.crud.data.remote.NetworkErrorResponse
 import com.relia.crud.utils.Constant
+import com.relia.crud.utils.Constant.TOKEN_EXPIRED_KEY
 import com.relia.crud.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -34,6 +35,7 @@ class MainViewModel @Inject constructor(
 
     val showProductDetail = MutableLiveData<Event<Product>>()
     val showToast = MutableLiveData<Event<String>>()
+    val showToastResInt = MutableLiveData<Event<Int>>()
     val logUserOut = MutableLiveData<Event<Boolean>>()
 
     fun loadProductList() {
@@ -42,7 +44,6 @@ class MainViewModel @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ result -> _productList.setValue(result) }
             ) { error ->
-                showToast.value = Event("get products error: " + error.message)
                 handleLogUserOutExpired(error)
             }
     }
@@ -53,9 +54,9 @@ class MainViewModel @Inject constructor(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ result ->
-                if (result.id != null)
-                    _productList.value = arrayListOf(result)
-                else showToast.value = Event("No Record exists!")
+                if (result.getErrorMessage() != null) showToast.value =
+                    Event(result.getErrorMessage().toString())
+                else _productList.value = arrayListOf(result.getProduct())
             }
             ) { error ->
                 showToast.value = Event("search products error: " + error.message)
@@ -67,12 +68,11 @@ class MainViewModel @Inject constructor(
         productRepository.addProduct(product)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .map {
-                it.id != null
-            }
             .subscribe({ result ->
-                if (result) showToast.value = Event("add product successfully")
-                else showToast.value = Event("Item already exists!")
+                if (result.getErrorMessage() != null) showToast.value =
+                    Event(result.getErrorMessage().toString())
+                else showToastResInt.value = Event(R.string.add_product_success)
+
             }
             ) { error ->
                 handleLogUserOutExpired(error)
@@ -83,13 +83,11 @@ class MainViewModel @Inject constructor(
         productRepository.updateProduct(product)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .map {
-                it.id != null
-            }
             .subscribe({ result ->
-                if (result) {
-                    showToast.value = Event("Update product successfully")
-                } else showToast.value = Event("Item not exists!")
+                if (result.getErrorMessage() != null) showToast.value =
+                    Event(result.getErrorMessage().toString())
+                else showToastResInt.value = Event(R.string.update_product_success)
+
             }
             ) { error ->
                 handleLogUserOutExpired(error)
@@ -101,14 +99,13 @@ class MainViewModel @Inject constructor(
         productRepository.deleteProduct(product)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .map {
-                it.id != null
-            }
             .subscribe({ result ->
-                if (result) {
-                    showToast.value = Event("Delete product successfully")
+                if (result.getErrorMessage() != null) showToast.value =
+                    Event(result.getErrorMessage().toString())
+                else {
+                    showToastResInt.value = Event(R.string.delete_product_success)
                     loadProductList()
-                } else showToast.value = Event("Item not exists!")
+                }
             }
             ) { error ->
                 handleLogUserOutExpired(error)
@@ -126,7 +123,7 @@ class MainViewModel @Inject constructor(
                 error.response()?.errorBody()?.string(),
                 object : TypeToken<NetworkErrorResponse>() {}.type
             )
-            if (errorMessage.error.toString() == "Provided token is expired.") {
+            if (errorMessage.error.toString() == TOKEN_EXPIRED_KEY) {
                 sharedPreferences.edit().putString(Constant.TOKEN_KEY, "").apply()
                 showToast.value = Event(errorMessage.error.toString())
                 logUserOut.value = Event(true)

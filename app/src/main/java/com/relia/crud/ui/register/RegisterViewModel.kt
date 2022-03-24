@@ -31,16 +31,16 @@ class RegisterViewModel @Inject constructor(
     val registerResult: LiveData<User> = _registerResult
     private val _registerResultFailed = MutableLiveData<String>()
     val registerResultFailed: LiveData<String> = _registerResultFailed
+
     fun register(email: String, password: String) {
         authRepository.register(email, password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ result ->
-                if(result.data!= null)
-                _registerResult.value = result.data!!
+                if (result.data != null)
+                    _registerResult.value = result.data!!
             }) { error ->
-                if (error is HttpException)
-                {
+                if (error is HttpException) {
                     val errorMessage: NetworkErrorResponse = Gson().fromJson(
                         error.response()?.errorBody()?.string(),
                         object : TypeToken<NetworkErrorResponse>() {}.type
@@ -88,8 +88,7 @@ class RegisterViewModel @Inject constructor(
                 _loginResult.value = result.token
                 sharedPreferences.edit().putString(Constant.TOKEN_KEY, result.token).apply()
             }) { error ->
-                if (error is HttpException)
-                {
+                if (error is HttpException) {
                     val errorMessage: NetworkErrorResponse = Gson().fromJson(
                         error.response()?.errorBody()?.string(),
                         object : TypeToken<NetworkErrorResponse>() {}.type

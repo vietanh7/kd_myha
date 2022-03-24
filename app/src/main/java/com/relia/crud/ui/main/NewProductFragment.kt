@@ -43,14 +43,20 @@ class NewProductFragment : Fragment(R.layout.fragment_add_product) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.title = getString(com.relia.crud.R.string.add_new_product);
-        val actionBar = (activity as AppCompatActivity?)!!.supportActionBar
+        activity?.title = getString(R.string.add_new_product)
+        val actionBar = (activity as AppCompatActivity?)?.supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.setHomeButtonEnabled(true)
 
         viewModel.showToast.observe(this) { event ->
             event.getContentIfNotHandled()?.let {
                 Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        viewModel.showToastResInt.observe(this) { event ->
+            event.getContentIfNotHandled()?.let {
+                Toast.makeText(requireContext(), getString(it), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -68,7 +74,7 @@ class NewProductFragment : Fragment(R.layout.fragment_add_product) {
                     product_name = binding.etProductName.text.toString(),
                     qty = binding.etQuantity.text.toString().toIntOrNull()?:0,
                     price = binding.etPrice.text.toString().toLongOrNull()?:0,
-                    unit = binding.etUnit.text.toString()?:"",
+                    unit = binding.etUnit.text.toString(),
                     status = binding.etStatus.text.toString().toShortOrNull()?:0
                 )
             )

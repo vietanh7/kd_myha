@@ -26,4 +26,8 @@
     <string name="blank_product_name">Product Name is a required field</string>
     <string name="blank_unit">Unit is a required field</string>
 
+    <string name="add_product_success">Add product successfully</string>
+    <string name="update_product_success">Update product successfully</string>
+    <string name="delete_product_success">Delete product successfully</string>
+
 </resources>
