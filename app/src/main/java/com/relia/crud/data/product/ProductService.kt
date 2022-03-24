@@ -12,14 +12,14 @@ interface ProductService {
 
     @FormUrlEncoded
     @POST("item/add")
-    fun addProduct(@FieldMap body: Map<String, String>): Observable<String>
+    fun addProduct(@FieldMap body: Map<String, String>): Observable<Product>
 
     @FormUrlEncoded
     @POST("item/update")
-    fun updateProduct(@FieldMap body: Map<String, String>): Observable<String>
+    fun updateProduct(@FieldMap body: Map<String, String>): Observable<Product>
 
     @FormUrlEncoded
     @POST("item/delete")
-    fun deleteProduct(@FieldMap body: Map<String, String>): Observable<String>
+    fun deleteProduct(@FieldMap body: Map<String, String>): Observable<Product>
 
 }

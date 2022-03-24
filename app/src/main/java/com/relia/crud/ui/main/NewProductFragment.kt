@@ -92,26 +92,23 @@ class NewProductFragment : Fragment(R.layout.fragment_add_product) {
             }
         })
 
+        checkFormState()
         binding.etSku.afterTextChanged {
-            viewModel.productDetailDataChanged(
-                binding.etSku.text.toString(),
-                binding.etProductName.text.toString(),
-                binding.etUnit.text.toString()
-            )
+            checkFormState()
         }
         binding.etProductName.afterTextChanged {
-            viewModel.productDetailDataChanged(
-                binding.etSku.text.toString(),
-                binding.etProductName.text.toString(),
-                binding.etUnit.text.toString()
-            )
+            checkFormState()
         }
         binding.etUnit.afterTextChanged {
-            viewModel.productDetailDataChanged(
-                binding.etSku.text.toString(),
-                binding.etProductName.text.toString(),
-                binding.etUnit.text.toString()
-            )
+            checkFormState()
         }
+    }
+
+    private fun checkFormState() {
+        viewModel.productDetailDataChanged(
+            binding.etSku.text.toString(),
+            binding.etProductName.text.toString(),
+            binding.etUnit.text.toString()
+        )
     }
 }

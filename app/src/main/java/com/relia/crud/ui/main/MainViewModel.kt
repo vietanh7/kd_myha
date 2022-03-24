@@ -48,11 +48,14 @@ class MainViewModel @Inject constructor(
     }
 
     fun onSearch(sku: String) {
+        _productList.value = arrayListOf()
         productRepository.searchProductBySku(sku)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ result ->
-                _productList.value = arrayListOf(result)
+                if (result.id != null)
+                    _productList.value = arrayListOf(result)
+                else showToast.value = Event("No Record exists!")
             }
             ) { error ->
                 showToast.value = Event("search products error: " + error.message)
@@ -64,9 +67,14 @@ class MainViewModel @Inject constructor(
         productRepository.addProduct(product)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ result -> showToast.value = Event("add product successfully") }
+            .map {
+                it.id != null
+            }
+            .subscribe({ result ->
+                if (result) showToast.value = Event("add product successfully")
+                else showToast.value = Event("Item already exists!")
+            }
             ) { error ->
-                showToast.value = Event("add products error: ${error.message}")
                 handleLogUserOutExpired(error)
             }
     }
@@ -75,9 +83,15 @@ class MainViewModel @Inject constructor(
         productRepository.updateProduct(product)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ result -> showToast.value = Event("update product successfully") }
+            .map {
+                it.id != null
+            }
+            .subscribe({ result ->
+                if (result) {
+                    showToast.value = Event("Update product successfully")
+                } else showToast.value = Event("Item not exists!")
+            }
             ) { error ->
-                showToast.value = Event("update products error: " + error.message)
                 handleLogUserOutExpired(error)
             }
 
@@ -87,12 +101,16 @@ class MainViewModel @Inject constructor(
         productRepository.deleteProduct(product)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .map {
+                it.id != null
+            }
             .subscribe({ result ->
-                showToast.value = Event("Delete product successfully")
-                loadProductList()
+                if (result) {
+                    showToast.value = Event("Delete product successfully")
+                    loadProductList()
+                } else showToast.value = Event("Item not exists!")
             }
             ) { error ->
-                showToast.value = Event("delete products error: " + error.message)
                 handleLogUserOutExpired(error)
             }
 
@@ -110,6 +128,7 @@ class MainViewModel @Inject constructor(
             )
             if (errorMessage.error.toString() == "Provided token is expired.") {
                 sharedPreferences.edit().putString(Constant.TOKEN_KEY, "").apply()
+                showToast.value = Event(errorMessage.error.toString())
                 logUserOut.value = Event(true)
             }
         }

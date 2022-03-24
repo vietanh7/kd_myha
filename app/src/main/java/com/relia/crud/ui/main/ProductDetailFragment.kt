@@ -77,36 +77,33 @@ class ProductDetailFragment : Fragment(R.layout.fragment_product_detail), Produc
             }
         })
 
+        checkFormState()
         binding.etSku.afterTextChanged {
-            viewModel.productDetailDataChanged(
-                binding.etSku.text.toString(),
-                binding.etProductName.text.toString(),
-                binding.etUnit.text.toString()
-            )
+            checkFormState()
         }
         binding.etProductName.afterTextChanged {
-            viewModel.productDetailDataChanged(
-                binding.etSku.text.toString(),
-                binding.etProductName.text.toString(),
-                binding.etUnit.text.toString()
-            )
+            checkFormState()
         }
         binding.etUnit.afterTextChanged {
-            viewModel.productDetailDataChanged(
-                binding.etSku.text.toString(),
-                binding.etProductName.text.toString(),
-                binding.etUnit.text.toString()
-            )
+            checkFormState()
         }
+    }
+
+    private fun checkFormState() {
+        viewModel.productDetailDataChanged(
+            binding.etSku.text.toString(),
+            binding.etProductName.text.toString(),
+            binding.etUnit.text.toString()
+        )
     }
 
     override fun onEdit() {
         viewModel.onEdit(Product(sku = binding.etSku.text.toString(),
             product_name = binding.etProductName.text.toString(),
-            qty = binding.etQuantity.text.toString().toInt(),
-            price = binding.etPrice.text.toString().toLong(),
+            qty = binding.etQuantity.text.toString().toIntOrNull()?:0,
+            price = binding.etPrice.text.toString().toLongOrNull()?:0,
             unit = binding.etUnit.text.toString(),
-            status = binding.etStatus.text.toString().toShort()))
+            status = binding.etStatus.text.toString().toShortOrNull()?:0))
     }
 
     override fun onDelete() {
